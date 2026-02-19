@@ -18,7 +18,7 @@ component "lambda" {
   inputs = {
     environment    = var.environment
     region         = var.region
-    s3_bucket_name = component.s3.outputs.bucket_name
+    s3_bucket_name = component.s3.bucket_name
     function_name  = var.function_name
     runtime        = var.lambda_runtime
     handler        = var.lambda_handler
@@ -38,8 +38,8 @@ component "api_gateway" {
   inputs = {
     environment          = var.environment
     region               = var.region
-    lambda_function_arn  = component.lambda.outputs.function_arn
-    lambda_function_name = component.lambda.outputs.function_name
+    lambda_function_arn  = component.lambda.function_arn
+    lambda_function_name = component.lambda.function_name
     api_name             = var.api_name
     api_description      = var.api_description
   }
