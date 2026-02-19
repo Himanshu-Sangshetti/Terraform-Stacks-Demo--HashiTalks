@@ -1,3 +1,37 @@
+deployment_auto_approve "no_changes" {
+  check {
+    condition = context.plan.changes.total == 0
+    reason    = "Plan contains changes and requires manual approval."
+  }
+}
+
+deployment_auto_approve "low_risk_changes" {
+  check {
+    condition = (context.plan.changes.total < 5) && (context.plan.changes.destroy == 0) && (context.plan.changes.replace == 0)
+    reason    = "Plan contains too many changes, destroys, or replaces for automatic approval."
+  }
+}
+
+deployment_group "dev_group" {
+  auto_approve_checks = [
+    deployment_auto_approve.no_changes,
+    deployment_auto_approve.low_risk_changes
+  ]
+}
+
+deployment_group "east_coast_group" {
+  auto_approve_checks = [
+    deployment_auto_approve.no_changes,
+    deployment_auto_approve.low_risk_changes
+  ]
+}
+
+deployment_group "prod_group" {
+}
+
+deployment_group "dr_group" {
+}
+
 deployment "dev" {
   variables = {
     environment       = "dev"
@@ -11,7 +45,7 @@ deployment "dev" {
     api_name         = "demo-api"
     api_description  = "Development API"
   }
-  deployment_group = deployment_group.non_production
+  deployment_group = deployment_group.dev_group
 }
 
 deployment "prod" {
@@ -27,7 +61,7 @@ deployment "prod" {
     api_name         = "demo-api"
     api_description  = "Production API"
   }
-  deployment_group = deployment_group.production
+  deployment_group = deployment_group.prod_group
 }
 
 deployment "east-coast" {
@@ -43,7 +77,7 @@ deployment "east-coast" {
     api_name         = "demo-api"
     api_description  = "East Coast Regional API"
   }
-  deployment_group = deployment_group.non_production
+  deployment_group = deployment_group.east_coast_group
 }
 
 deployment "disaster-recovery" {
@@ -59,29 +93,5 @@ deployment "disaster-recovery" {
     api_name         = "demo-api"
     api_description  = "Disaster Recovery API"
   }
-  deployment_group = deployment_group.production
-}
-
-deployment_auto_approve "no_changes" {
-  check {
-    condition = context.plan.changes.total == 0
-    reason    = "Plan contains changes and requires manual approval."
-  }
-}
-
-deployment_auto_approve "low_risk_changes" {
-  check {
-    condition = (context.plan.changes.total < 5) && (context.plan.changes.destroy == 0) && (context.plan.changes.replace == 0)
-    reason    = "Plan contains too many changes, destroys, or replaces for automatic approval."
-  }
-}
-
-deployment_group "non_production" {
-  auto_approve_checks = [
-    deployment_auto_approve.no_changes,
-    deployment_auto_approve.low_risk_changes
-  ]
-}
-
-deployment_group "production" {
+  deployment_group = deployment_group.dr_group
 }
