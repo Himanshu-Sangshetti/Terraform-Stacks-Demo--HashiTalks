@@ -27,8 +27,7 @@ component "lambda" {
   }
 
   providers = {
-    aws     = provider.aws.this
-    archive = provider.archive.this
+    aws = provider.aws.this
   }
 }
 

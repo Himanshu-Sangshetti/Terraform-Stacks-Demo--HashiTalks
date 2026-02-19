@@ -1,9 +1,3 @@
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_file = "${path.module}/index.py"
-  output_path = "${path.module}/lambda_function.zip"
-}
-
 resource "aws_iam_role" "lambda" {
   name = "${var.environment}-${var.function_name}-role"
 
@@ -56,14 +50,14 @@ resource "aws_iam_role_policy" "lambda_s3" {
 }
 
 resource "aws_lambda_function" "main" {
-  filename         = data.archive_file.lambda_zip.output_path
+  filename         = "${path.module}/lambda_function.zip"
   function_name    = "${var.environment}-${var.function_name}"
   role            = aws_iam_role.lambda.arn
   handler         = var.handler
   runtime         = var.runtime
   timeout         = var.timeout
   memory_size     = var.memory_size
-  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  source_code_hash = filebase64sha256("${path.module}/lambda_function.zip")
 
   environment {
     variables = {

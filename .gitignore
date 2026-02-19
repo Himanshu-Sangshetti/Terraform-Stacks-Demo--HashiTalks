@@ -4,6 +4,7 @@
 *.tfvars
 *.tfplan
 *.zip
+!modules/lambda/lambda_function.zip
 .idea/
 .vscode/
 *.swp

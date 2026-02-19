@@ -3,10 +3,6 @@ required_providers {
     source  = "hashicorp/aws"
     version = "~> 5.0"
   }
-  archive = {
-    source  = "hashicorp/archive"
-    version = "~> 2.4"
-  }
 }
 
 provider "aws" "this" {
@@ -14,5 +10,3 @@ provider "aws" "this" {
     region = var.region
   }
 }
-
-provider "archive" "this" {}
