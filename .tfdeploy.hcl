@@ -33,7 +33,7 @@ deployment_group "dr_group" {
 }
 
 deployment "dev" {
-  variables = {
+  inputs = {
     environment       = "dev"
     region           = "us-east-1"
     bucket_name      = "demo-app-data"
@@ -49,7 +49,7 @@ deployment "dev" {
 }
 
 deployment "prod" {
-  variables = {
+  inputs = {
     environment       = "prod"
     region           = "us-east-1"
     bucket_name      = "demo-app-data"
@@ -65,7 +65,7 @@ deployment "prod" {
 }
 
 deployment "east-coast" {
-  variables = {
+  inputs = {
     environment       = "east-coast"
     region           = "us-east-1"
     bucket_name      = "demo-app-data"
@@ -81,7 +81,7 @@ deployment "east-coast" {
 }
 
 deployment "disaster-recovery" {
-  variables = {
+  inputs = {
     environment       = "disaster-recovery"
     region           = "us-west-2"
     bucket_name      = "demo-app-data"
